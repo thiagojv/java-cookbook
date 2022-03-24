@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import thiagojv.cookbook.java.entities.Pessoa;
 
 @Repository
-public interface PessoaRepository extends CrudRepository<Pessoa, String> {
+public interface PessoaRepository extends CrudRepository<Pessoa, Integer> {
 }

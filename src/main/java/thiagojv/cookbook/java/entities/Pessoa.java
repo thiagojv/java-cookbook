@@ -13,7 +13,7 @@ public class Pessoa {
   @Id
   @GeneratedValue
   @JsonProperty
-  private String id;
+  private Integer id;
 
   @JsonProperty
   private String nome;
