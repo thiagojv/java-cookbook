@@ -1,5 +1,6 @@
 package thiagojv.cookbook.java.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import thiagojv.cookbook.java.repositories.OficinaRepository;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping(path = "/oficina")
 public class OficinaController {
@@ -35,13 +37,11 @@ public class OficinaController {
         if (model.getNome().isBlank()){
             return ResponseEntity.badRequest().build();
         }
-        System.out.println(model.getContatos());
-        System.out.println(model.getEndereco());
         try {
             oficinaRepository.save(model);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            log.error(e.getMessage());
             return ResponseEntity.internalServerError().build();
         }
     }

@@ -2,17 +2,12 @@ package thiagojv.cookbook.java.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Data
 @Entity
-@NoArgsConstructor
-public class Endereco  implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Endereco {
 
     @Id
     @GeneratedValue
