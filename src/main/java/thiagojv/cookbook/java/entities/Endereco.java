@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -11,7 +12,7 @@ public class Endereco {
 
     @Id
     @GeneratedValue
-    private int id;
+    private UUID id;
 
     @JsonProperty
     private String endereco;
@@ -24,6 +25,9 @@ public class Endereco {
 
     @JsonProperty
     private String cidade;
+
+    @JsonProperty
+    private String cep;
 
     @JsonProperty
     private String estado;
