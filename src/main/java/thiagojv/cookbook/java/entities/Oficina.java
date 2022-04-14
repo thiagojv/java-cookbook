@@ -22,8 +22,6 @@ public class Oficina {
     @JsonProperty
     private String cpfCnpj;
 
-    @OneToMany(mappedBy = "oficina", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-
     @JsonProperty
     private Boolean aprovacaoAutomaticaVistoria;
 
@@ -35,8 +33,6 @@ public class Oficina {
 
     @JsonProperty
     private Boolean descontoFranquia;
-
-    @OneToMany(mappedBy = "oficina", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 
     @JsonProperty
     private Boolean aprovado;
