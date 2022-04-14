@@ -34,6 +34,7 @@ public class Oficina {
     @JsonProperty
     private Boolean descontoFranquia;
 
+
     @JsonProperty
     private Boolean aprovado;
 
