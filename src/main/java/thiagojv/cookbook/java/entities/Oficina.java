@@ -22,29 +22,25 @@ public class Oficina {
     @JsonProperty
     private String cpfCnpj;
 
-    @JsonProperty
     @OneToMany(mappedBy = "oficina", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Oficina> endereco;
 
     @JsonProperty
-    private Integer aprovacaoAutomaticaVistoria;
+    private Boolean aprovacaoAutomaticaVistoria;
 
     @JsonProperty
-    private Integer vistoriaPelaCilia;
+    private Boolean vistoriaPelaCilia;
 
     @JsonProperty
-    private Integer vistoriaPorImagem;
+    private Boolean vistoriaPorImagem;
 
     @JsonProperty
-    private Integer descontoFranquia;
+    private Boolean descontoFranquia;
 
-    @JsonProperty
     @OneToMany(mappedBy = "oficina", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Oficina> oficina;
 
     @JsonProperty
-    private Integer aprovado;
+    private Boolean aprovado;
 
     @JsonProperty
-    private Integer removido;
+    private Boolean removido;
 }
