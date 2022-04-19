@@ -13,7 +13,6 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping(path = "/oficina")
-
 public class OficinaController {
 
     @Autowired
