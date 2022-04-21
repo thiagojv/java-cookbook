@@ -1,80 +1,72 @@
 package thiagojv.cookbook.java.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import thiagojv.cookbook.java.entities.Endereco;
+import thiagojv.cookbook.java.entities.Oficina;
 import thiagojv.cookbook.java.repositories.EnderecoRepository;
+import thiagojv.cookbook.java.repositories.OficinaRepository;
 
-import java.util.List;
+import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping(path = "/oficina/{idOficina}/endereco")
 public class EnderecoController {
 
-    private final EnderecoRepository repository;
     @Autowired
     private EnderecoRepository enderecoRepository;
 
-    EnderecoController(EnderecoRepository enderecoRepository) {
-        this.repository = enderecoRepository;
-    }
+    @Autowired
+    private OficinaRepository oficinaRepository;
 
-    @GetMapping
-    public List findAll (){
-        return repository.findAll();
-    }
+    @GetMapping()
+    public ResponseEntity<Iterable<Endereco>> listAll(@PathVariable UUID idOficina) {
+        try{
+            Oficina oficina = oficinaRepository.findById(idOficina).get();
 
-    @GetMapping(path = {"/{id}"})
-   public ResponseEntity findById (@PathVariable long id){
-        return repository.findById(id)
-                .map(record -> ResponseEntity.ok().body(record))
-                .orElse(ResponseEntity.notFound().build());
-        }
-
-    @PostMapping
-    public Endereco salvar(@RequestBody Endereco endereco){
-        return repository.save(endereco);
-    }
-
-    @PutMapping(value = "/{id}")
-    public ResponseEntity alterar(@PathVariable Long id,@RequestBody Endereco endereco){
-        if (id == null) {
-            return ResponseEntity.badRequest().build();
-        }else if (endereco.getEndereco().isBlank()){
-            return ResponseEntity.badRequest().build();
-        }
-        var optional =enderecoRepository.findById(id);
-        if (optional.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
-        var novoEndereco = optional.get();
-        novoEndereco.setEndereco(endereco.getEndereco());
-        novoEndereco.setBairro(endereco.getBairro());
-        novoEndereco.setCidade(endereco.getCidade());
-        novoEndereco.setComplemento(endereco.getComplemento());
-        novoEndereco.setCep(endereco.getCep());
-
-        try {
-            enderecoRepository.save(novoEndereco);
-            return ResponseEntity.accepted().build();
-
-        } catch (Exception e){
+            Iterable<Endereco> endereco = enderecoRepository.findByOficina(oficina);
+            return ResponseEntity.ok(endereco);
+        }catch (Exception e){
+            log.error(e.getMessage());
             return ResponseEntity.internalServerError().build();
         }
     }
 
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> apagar(@PathVariable Long id){
-        if (id == null) {
-            return ResponseEntity.badRequest().build();
-        }else if (!enderecoRepository.existsById(id)){
-            return ResponseEntity.notFound().build();
-        }
-        try {
-            enderecoRepository.deleteById(id);
-            return ResponseEntity.accepted().build();
+    @GetMapping("/{id}")
+    public ResponseEntity<Endereco> listOne(@PathVariable UUID idOficina, @PathVariable Long id) {
+        try{
+            Oficina oficina = oficinaRepository.findById(idOficina).get();
+
+            Iterable<Endereco> endereco = enderecoRepository.findByOficina(oficina);
+            Endereco enderecoReturn = new Endereco();
+            for(Endereco end: endereco) {
+                if(end.getId() == id){
+                    enderecoReturn = end;
+                }
+            }
+            if (enderecoReturn.getEndereco() == null){
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(enderecoReturn);
         }catch (Exception e){
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PostMapping()
+    public ResponseEntity<Void> salvar(@PathVariable UUID idOficina, @RequestBody Endereco endereco){
+        try{
+            Oficina oficina = oficinaRepository.findById(idOficina).get();
+            endereco.setOficina(oficina);
+            enderecoRepository.save(endereco);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }catch (Exception e){
+            log.error(e.getMessage());
             return ResponseEntity.internalServerError().build();
         }
     }

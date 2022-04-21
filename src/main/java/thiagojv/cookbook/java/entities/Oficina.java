@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -39,4 +39,7 @@ public class Oficina {
 
     @JsonProperty
     private Boolean removido;
+
+    @OneToMany()
+    private List<Endereco> enderecos;
 }

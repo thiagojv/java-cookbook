@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @Data
 @Entity
@@ -41,7 +40,6 @@ public class Endereco {
     @JsonProperty
     private Integer removido;
 
-    @ManyToOne(fetch = FetchType.EAGER,  cascade=CascadeType.ALL)
-    @JoinColumn(name="ID_OFICINA/")
+    @ManyToOne()
     private Oficina oficina;
 }
