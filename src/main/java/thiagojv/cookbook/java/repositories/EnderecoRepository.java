@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 import thiagojv.cookbook.java.entities.Endereco;
 import thiagojv.cookbook.java.entities.Oficina;
 
+import java.util.List;
+
 @Repository
 public interface EnderecoRepository extends JpaRepository <Endereco, Long> {
-    Iterable<Endereco> findByOficina(Oficina oficina);
+    List<Endereco> findByOficina(Oficina oficina);
 }

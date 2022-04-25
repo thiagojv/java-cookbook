@@ -10,7 +10,9 @@ import thiagojv.cookbook.java.entities.Oficina;
 import thiagojv.cookbook.java.repositories.EnderecoRepository;
 import thiagojv.cookbook.java.repositories.OficinaRepository;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -37,21 +39,16 @@ public class EnderecoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Endereco> listOne(@PathVariable UUID idOficina, @PathVariable Long id) {
+    public ResponseEntity<List<Endereco>> listOne(@PathVariable UUID idOficina, @PathVariable Long id) {
         try{
             Oficina oficina = oficinaRepository.findById(idOficina).get();
 
-            Iterable<Endereco> endereco = enderecoRepository.findByOficina(oficina);
-            Endereco enderecoReturn = new Endereco();
-            for(Endereco end: endereco) {
-                if(end.getId() == id){
-                    enderecoReturn = end;
-                }
-            }
-            if (enderecoReturn.getEndereco() == null){
+            List<Endereco> enderecos = enderecoRepository.findByOficina(oficina).stream().filter(e -> e.getId() == id).collect(Collectors.toList());
+
+            if (enderecos.size() == 0) {
                 return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(enderecoReturn);
+            return ResponseEntity.ok(enderecos);
         }catch (Exception e){
             log.error(e.getMessage());
             return ResponseEntity.internalServerError().build();
