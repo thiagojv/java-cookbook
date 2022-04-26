@@ -28,10 +28,8 @@ public class EnderecoController {
     @GetMapping()
     public ResponseEntity<Iterable<Endereco>> listAll(@PathVariable UUID idOficina) {
         try{
-            Oficina oficina = oficinaRepository.findById(idOficina).get();
-
-            Iterable<Endereco> endereco = enderecoRepository.findByOficina(oficina);
-            return ResponseEntity.ok(endereco);
+            List<Endereco> enderecos = enderecoRepository.findByOficinaId(idOficina);
+            return ResponseEntity.ok(enderecos);
         }catch (Exception e){
             log.error(e.getMessage());
             return ResponseEntity.internalServerError().build();
@@ -41,10 +39,7 @@ public class EnderecoController {
     @GetMapping("/{id}")
     public ResponseEntity<List<Endereco>> listOne(@PathVariable UUID idOficina, @PathVariable Long id) {
         try{
-            Oficina oficina = oficinaRepository.findById(idOficina).get();
-
-            List<Endereco> enderecos = enderecoRepository.findByOficina(oficina).stream().filter(e -> e.getId() == id).collect(Collectors.toList());
-
+           List<Endereco> enderecos = enderecoRepository.findByOficinaId(idOficina).stream().filter(e -> e.getId() == id).collect(Collectors.toList());
             if (enderecos.size() == 0) {
                 return ResponseEntity.notFound().build();
             }
@@ -68,3 +63,4 @@ public class EnderecoController {
         }
     }
 }
+
